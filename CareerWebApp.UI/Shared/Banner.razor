@@ -1,0 +1,24 @@
+﻿<div class="overflow-hidden p-3 p-md-5 text-center d-flex align-items-center" style=" min-height: @(MinHeight)px; position: relative;">
+    <div style="
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: url('@BackgroundPath') no-repeat center center;
+        background-size: cover;
+        min-height: @(MinHeight)px;
+        width: 100%;
+        z-index: -1;"></div>
+    <div class="content-wrapper position-absolute">
+        <div class="col p-lg-5 my-5 text-start text-white">
+            <h1 class="title-text">@((MarkupString)Title)</h1>
+            <p class="lead fw-normal mt-5">@((MarkupString)SubTitle)</p>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string Title { get; set; }
+    [Parameter] public string SubTitle { get; set; }
+    [Parameter] public string BackgroundPath { get; set; }
+    [Parameter] public int MinHeight { get; set; } = 810;
+}

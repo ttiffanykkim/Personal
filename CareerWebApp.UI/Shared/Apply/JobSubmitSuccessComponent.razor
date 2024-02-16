@@ -1,0 +1,16 @@
+﻿<div class="my-5 mx-auto text-center w-50">
+    <h1 class="mb-5">@Posting.Detail.JobTitle</h1>
+</div>
+<div class="my-5 mx-auto text-center w-50">
+    <div class="alert alert-primary" role="alert">
+        Thank you for applying to Uju. We appreciate your interest in joining our team.<br />
+        Our recruitment team will review your application and contact you if your skills and experience match our requirements.
+    </div>
+</div>
+<div class="overflow-hidden text-center" style="min-height:200px">
+    <a href="jobs">&lt; Back to search results </a>
+</div>
+
+@code {
+    [Parameter] public JobPostingAPIReponse Posting { get; set; }
+}

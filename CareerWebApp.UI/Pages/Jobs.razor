@@ -1,0 +1,192 @@
+﻿@page "/jobs"
+@using System.Text
+@inject JobService JobService
+
+<Banner MinHeight="810"
+        Title="Find your perfect role."
+        SubTitle="Apply now and join UJU."
+        BackgroundPath="/img/index/Home.jpg" />
+
+<div class="container">
+    <div class="my-5 mx-auto text-center w-50">
+        <div class="input-group flex-nowrap mb-1">
+            <span class="input-group-text bg-light border-end-0"><i class="fa fa-search"></i></span>
+            <input @bind="searchCondition.AllKeyword" @bind:event="oninput" @onkeyup="@HandleSearchInput" type="text" class="form-control form-control-lg bg-light border-start-0 p-3" placeholder="Search by role or keyword">
+        </div>
+        <p class="text-muted">
+            Most corporate roles require English-language skills.
+        </p>
+    </div>
+
+
+    <div class="px-3 py-2 border-bottom mb-3">
+        <div class="container d-flex flex-wrap justify-content-center">
+            <div class="col-12 col-lg-auto me-lg-auto">
+                <span class="me-3"><i class="fas fa-list"></i>Filter</span>|
+                <span class="ms-3 fw-bold" @onclick="ClearAllFilter" style="cursor: pointer;">Clear All</span>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="row">
+            <div class="col-md-2">
+                <h5>Refine by</h5>
+                <div>
+                    <p>
+                        <div data-bs-toggle="collapse" data-bs-target="#jobtitle" aria-expanded="false" aria-controls="jobtitle">
+                            Job Title
+                        </div>
+                    </p>
+                    <div class="collapse" id="jobtitle">
+                        <div class="input-group flex-nowrap mb-1">
+                            <input @bind="searchCondition.JobTitle" @bind:event="oninput" @onkeyup="@HandleSearchInput" type="text" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <p>
+                        <div data-bs-toggle="collapse" data-bs-target="#location" aria-expanded="false" aria-controls="location">
+                            Location
+                        </div>
+                    </p>
+                    <div class="collapse" id="location">
+                        <div class="input-group flex-nowrap mb-1">
+                            <input @bind="searchCondition.JobLocation" @bind:event="oninput" @onkeyup="@HandleSearchInput" type="text" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <p>
+                        <div data-bs-toggle="collapse" data-bs-target="#teams" aria-expanded="false" aria-controls="teams">
+                            Department
+                        </div>
+                    </p>
+                    <div class="collapse" id="teams">
+                        <div class="input-group flex-nowrap mb-1">
+                            <input @bind="searchCondition.Department" @bind:event="oninput" @onkeyup="@HandleSearchInput" type="text" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <p class="text-muted">@numberOfFilter filter(s) applied. </p>
+                <p class="ms-1">@appliedFilters</p>
+                <hr />
+                <div class="d-flex mb-5">
+                    <div class="me-auto fs-5 fw-bold">@numberOfPosting Results</div>
+                    <div class="fs-5">
+                        Sort By:
+                        <select @onchange="SortList" class="borderless-dropdown">
+                            <option value="newest">Newest</option>
+                            <option value="oldest">Oldest</option>
+                        </select>
+                    </div>
+                </div>
+                @{
+                    foreach (var jobSummary in JobSummaries)
+                    {
+                        <JobItemComponent JobSummary=jobSummary></JobItemComponent>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+
+    public List<JobSummary> JobSummaries = new List<JobSummary>();
+    private JobSearchCondition searchCondition = new JobSearchCondition();
+    private Timer searchDelayTimer;
+    private int numberOfPosting => JobSummaries.Count;
+    private int numberOfFilter = 0;
+    private string appliedFilters = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetJobListDefaultAsync();
+        searchDelayTimer = new Timer(TriggerSearch, null, Timeout.Infinite, Timeout.Infinite); // Set timer to execute TriggerSearch, but it won't start at this point.
+    }
+
+    private async Task GetJobListDefaultAsync()
+    {
+        JobSummaries = (await JobService.GetJobList()).OrderByDescending(o => o.CreatedAt).ToList();
+    }
+
+    private async Task ClearAllFilter()
+    {
+        searchCondition.JobTitle = null;
+        searchCondition.JobLocation = null;
+        searchCondition.AllKeyword = null;
+        searchCondition.Department = null;
+        await GetJobListDefaultAsync();
+        StateHasChanged();
+    }
+
+    private void HandleSearchInput()
+    {
+        // Set timer to trigger search in 0.5 second
+        searchDelayTimer.Change(500, Timeout.Infinite);
+    }
+
+    private void TriggerSearch(object state)
+    {
+        UpdateNumberOfFilter();
+        InvokeAsync(async () =>
+        {
+            JobSummaries = await JobService.GetJobList(searchCondition);
+            StateHasChanged();
+        });
+    }
+
+    private void UpdateNumberOfFilter()
+    {
+        var filters = new List<string>();
+
+        if (!string.IsNullOrEmpty(searchCondition.JobTitle))
+        {
+            filters.Add($"JobTitle: {searchCondition.JobTitle}");
+        }
+        if (!string.IsNullOrEmpty(searchCondition.Department))
+        {
+            filters.Add($"Department: {searchCondition.Department}");
+        }
+        if (!string.IsNullOrEmpty(searchCondition.JobLocation))
+        {
+            filters.Add($"Location: {searchCondition.JobLocation}");
+        }
+        if (!string.IsNullOrEmpty(searchCondition.AllKeyword))
+        {
+            filters.Add($"All Keywords: {searchCondition.AllKeyword}");
+        }
+
+        numberOfFilter = filters.Count;
+        appliedFilters = String.Join(", ", filters);
+    }
+
+    private void SortList(ChangeEventArgs e)
+    {
+        var sortOption = e.Value.ToString();
+        if (sortOption == "newest")
+        {
+            JobSummaries = JobSummaries.OrderByDescending(o => o.CreatedAt).ToList();
+        }
+        else if (sortOption == "oldest")
+        {
+            JobSummaries = JobSummaries.OrderBy(o => o.CreatedAt).ToList();
+        }
+
+        StateHasChanged();
+    }
+
+
+    public void Dispose()
+    {
+        // Remove timer behavior from the memory if this page is not used anymore.
+        searchDelayTimer?.Dispose();
+    }
+
+
+}

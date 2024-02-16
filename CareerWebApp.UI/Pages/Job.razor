@@ -1,0 +1,58 @@
+﻿@page "/jobs/{JobID}"
+@using System.Text.Json;
+<div class="container">
+    @if (Posting != null)
+    {
+        switch (ApplyStatus)
+        {
+            case ApplyStatus.OnDescription:
+                <JobDescriptionComponent Posting=Posting UpdateStatus="UpdateStatus" />
+                break;
+            case ApplyStatus.OnResumeUpload:
+                <JobResumeUploadComponent Application=Application Posting=Posting UpdateStatus="UpdateStatus" />
+                break;
+            case ApplyStatus.OnQuestionnaire:
+                <JobQuestionnaireComponent Application=Application Posting=Posting UpdateStatus="UpdateStatus" />
+                break;
+            case ApplyStatus.OnReview:
+                <JobReviewComponent Application=Application Posting=Posting UpdateStatus="UpdateStatus" />
+                break;
+            case ApplyStatus.OnSubmission:
+                <JobSubmitSuccessComponent Posting=Posting />
+                break;
+        }
+    }
+    else
+    {
+        <div class="my-5 mx-auto text-center w-50">
+            <div class="alert alert-danger" role="alert">
+                Invalid Acess
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public string JobID { get; set; }
+
+    public JobPostingAPIReponse Posting { get; set; }
+
+    private ApplyStatus ApplyStatus { get; set; } = ApplyStatus.OnDescription;
+    private ApplicationInfo Application = new ApplicationInfo();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (int.TryParse(JobID, out int jobID))
+        {
+            Posting = await JobService.GetJobPosting(jobID);
+            Application.JobID = jobID;
+        }
+    }
+
+    public void UpdateStatus(ApplyStatus status)
+    {
+        ApplyStatus = status;
+        // Console.WriteLine(JsonSerializer.Serialize(Application));
+        StateHasChanged();
+    }
+}

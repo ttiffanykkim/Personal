@@ -1,0 +1,107 @@
+﻿@inject JobService JobService
+
+<div class="my-5 mx-auto text-center w-50">
+    <h1 class="mb-5">@Posting.Detail.JobTitle</h1>
+    <h2 class="mb-2">Review Your Information</h2>
+
+</div>
+
+<div class="my-5 mx-auto w-50">
+    <h4 class="mb-2">Contact Information</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md mb-3">
+            <label for="firstName" class="form-label">First Name</label>
+            <input type="text" id="firstName" class="form-control" @bind="Application.FirstName">
+        </div>
+
+        <div class="col-md mb-3">
+            <label for="lastName" class="form-label">Last Name</label>
+            <input type="text" id="lastName" class="form-control" @bind="Application.LastName">
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="email" class="form-label">Email Address</label>
+        <input type="email" id="email" class="form-control" placeholder="Email" @bind="Application.Email">
+    </div>
+
+    <div class="mb-3">
+        <label for="phone" class="form-label">Preferred Phone Number</label>
+        <input type="text" id="phone" class="form-control" placeholder="Enter phone number" @bind="Application.PreferredPhoneNumber">
+    </div>
+
+    <div class="mb-3">
+        <label for="state" class="form-label">Primary State of Residence</label>
+        <select class="form-select" id="state" @bind="Application.SelectedState">
+            <option value="">Select a state...</option>
+            @foreach (var state in USStates)
+            {
+                <option value="@state">@state</option>
+            }
+        </select>
+    </div>
+    <h4 class="mt-4 mb-2">Resume</h4>
+    <hr />
+
+    <div class="icon-and-text">
+        <div class="icon-circle">
+            <i class="far fa-file-alt" aria-hidden="true"></i>
+        </div>
+        @if (Application.OptionalFileName != null)
+        {
+            <span>@Application.ResumeFileName</span>
+        }
+        else
+        {
+            <span>No Resume</span>
+        }
+    </div>
+
+    @if (Application.OptionalFileName != null)
+    {
+        <div class="icon-and-text mt-3">
+            <div class="icon-circle">
+                <i class="far fa-file-alt" aria-hidden="true"></i>
+            </div>
+            <span>@Application.OptionalFileName</span>
+        </div>
+    }
+</div>
+
+<div class="overflow-hidden text-center" style="min-height:200px">
+    <div class="col mx-auto my-5">
+        <a class="btn bg-light mt-3 fw-bold smooth-rounded px-5 py-2" @onclick="() => SubmitResume()">Submit my resume</a>
+    </div>
+    <a href="jobs">&lt; Back to search results </a>
+</div>
+
+@code {
+    [Parameter] public JobPostingAPIReponse Posting { get; set; }
+    [Parameter] public Action<ApplyStatus> UpdateStatus { get; set; }
+    [Parameter] public ApplicationInfo Application { get; set; }
+    public bool isSubmitting { get; set; } = false;
+
+    private string selectedState;
+    private List<string> USStates = new List<string>()
+{
+        "Alabama", "Alaska", "Arizona", "Arkansas", "California",
+        "Colorado", "Connecticut", "Delaware", "Florida", "Georgia",
+        "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa",
+        "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland",
+        "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri",
+        "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey",
+        "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio",
+        "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina",
+        "South Dakota", "Tennessee", "Texas", "Utah", "Vermont",
+        "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"
+    };
+
+    private async Task SubmitResume()
+    {
+        isSubmitting = true;
+        await JobService.SubmitResume(Application);
+        isSubmitting = false;
+        UpdateStatus.Invoke(ApplyStatus.OnSubmission);
+    }
+}

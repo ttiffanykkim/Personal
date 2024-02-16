@@ -1,0 +1,12 @@
+﻿.file-drop-zone {
+    display: flex;
+    width: 100%;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #DBDBDB;
+}
+
+::deep input[type=file] {
+    width: 100%;
+    padding: 50px;
+}

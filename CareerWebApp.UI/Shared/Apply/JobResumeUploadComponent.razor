@@ -1,0 +1,67 @@
+﻿@inject IJSRuntime JSRuntime
+
+<div class="my-5 mx-auto text-center w-50">
+    <h1 class="mb-5">@Posting.Detail.JobTitle</h1>
+    <h2 class="mb-2">Your Resume</h2>
+    <h5 class="fw-normal mb-5">Please submit your resume. It will help us understand<br />which teams most closely match your skills and interests.<br />Share your resume in any of the following formats: PDF, Microsoft Word, Pages, RTF, or TXT.</h5>
+
+    <div class="file-drop-zone mb-5">
+        <InputFile OnChange="@HandleResumeSelected" accept=".pdf,.doc,.docx,.rtf,.txt" />
+    </div>
+    <h2 class="mb-2">Optional Information</h2>
+    <h5 class="fw-normal mb-5">Add a cover letter, portfolio link, letters of recommendation, and more.</h5>
+    <div class="file-drop-zone mb-5">
+        <InputFile OnChange="@HandleOpptionalSelected" accept=".pdf,.doc,.docx,.rtf,.txt" />
+    </div>
+</div>
+
+<div class="overflow-hidden text-center" style="min-height:200px">
+    <div class="col mx-auto my-5">
+        <a class="btn bg-light mt-3 fw-bold smooth-rounded px-5 py-2" @onclick="() => UpdateStatus.Invoke(ApplyStatus.OnQuestionnaire)">Next</a>
+    </div>
+    <a href="jobs">&lt; Back to search results </a>
+</div>
+
+@code {
+    [Parameter] public JobPostingAPIReponse Posting { get; set; }
+    [Parameter] public Action<ApplyStatus> UpdateStatus { get; set; }
+    [Parameter] public ApplicationInfo Application { get; set; }
+    const long maxFileSize = 10 * 1024 * 1024; // 10 MB
+
+    private enum fileType
+    {
+        Resume,
+        Optional
+    }
+
+    private async Task HandleResumeSelected(InputFileChangeEventArgs e)
+    {
+        await HandleFileSelected(e.File, fileType.Resume);
+    }
+
+    private async Task HandleOpptionalSelected(InputFileChangeEventArgs e)
+    {
+        await HandleFileSelected(e.File, fileType.Optional);
+    }
+
+    private async Task HandleFileSelected(IBrowserFile file, fileType fileType)
+    {
+        if (file != null)
+        {
+            using var stream = file.OpenReadStream(maxFileSize);
+            using var memoryStream = new MemoryStream();
+            await stream.CopyToAsync(memoryStream);
+            switch (fileType)
+            {
+                case fileType.Resume:
+                    Application.ResumeFileName = file.Name;
+                    Application.ResumeFileContents = memoryStream.ToArray();
+                    break;
+                case fileType.Optional:
+                    Application.OptionalFileName = file.Name;
+                    Application.OptionalFileContents = memoryStream.ToArray();
+                    break;
+            }
+        }
+    }
+}

@@ -1,0 +1,89 @@
+id,questionid,order,answers
+1,1,1,Full-time
+2,1,2,Part-time
+3,1,3,Flexible
+4,2,1,Standard 9-5
+5,2,2,Flexible hours
+6,2,3,Remote work
+7,3,1,"Yes, I am open to relocating"
+8,3,2,"No, I prefer to work in my current location"
+9,4,1,"Yes, I am located in and legally eligible to work in the US"
+10,4,2,"No, I require sponsorship to work in the US"
+11,5,1,In-office
+12,5,2,Hybrid
+13,5,3,Fully remote
+14,6,1,In-person meetings
+15,6,2,Video conferences
+16,6,3,Email and messaging
+17,7,1,"Yes, I am open to occasional travel"
+18,7,2,"No, I prefer minimal travel"
+19,8,1,Small team and collaborative environment
+20,8,2,Medium-sized team and structured environment
+21,8,3,Large team and dynamic environment
+22,9,1,Regular one-on-one meetings
+23,9,2,Written feedback via email or messaging
+24,9,3,Team feedback sessions
+25,10,1,Formal training programs
+26,10,2,On-the-job learning
+27,10,3,Self-paced online courses
+28,11,1,FREE RESPONSE
+29,12,1,Git
+30,12,2,SVN
+31,12,3,Mercurial
+32,12,4,Limited experience with version control
+33,13,1,Extensive experience with continuous integration/continuous deployment (CI/CD)
+34,13,2,"Familiarity with containerization (e.g., Docker)"
+35,13,3,"Proficient in configuration management tools (e.g., Ansible)"
+36,13,4,Limited experience in DevOps practices
+37,14,1,AWS (Amazon Web Services)
+38,14,2,Azure
+39,14,3,Google Cloud Platform (GCP)
+40,14,4,Limited or no experience with cloud platforms
+41,15,1,Slack or Microsoft Teams
+42,15,2,Email and phone calls
+43,15,3,Prefer face-to-face communication
+44,15,4,Limited experience with team communication tools
+45,16,1,Adhere strictly to company policies
+46,16,2,Share information on a need-to-know basis
+47,16,3,Use secure communication channels
+48,16,4,Not very concerned about information security
+49,17,1,Google Analytics
+50,17,2,"Social media advertising (e.g., Facebook Ads)"
+51,17,3,"Email marketing platforms (e.g., Mailchimp)"
+52,17,4,"Content management systems (e.g., WordPress)"
+53,18,1,Clearly defined goals and measurable results
+54,18,2,High engagement and brand visibility
+55,18,3,Innovative and creative approach
+56,18,4,Limited success with the campaign
+57,19,1,Analyze key performance indicators (KPIs)
+58,19,2,Rely on intuition and subjective feedback
+59,19,3,Evaluate social media likes and shares
+60,19,4,Limited understanding of campaign metrics
+61,20,1,Conduct user research and usability testing
+62,20,2,Rely on personal design preferences
+63,20,3,Follow current design trends
+64,20,4,Limited consideration for user feedback
+65,21,1,"Yes, I have a design project"
+66,21,2,Limited experience
+67,22,1,"Adobe Creative Suite (Photoshop, Illustrator, InDesign)"
+68,22,2,Sketch
+69,22,3,Figma
+70,22,4,Limited proficiency in design tools
+71,23,1,"Yes, I have conducted successful sales pitch or negotiation"
+72,23,2,Limited experience
+73,24,1,Regular check-ins and communication
+74,24,2,Focus on meeting sales targets
+75,24,3,Rely on product/service features alone
+76,24,4,Limited emphasis on client relationships
+77,25,1,Adapt sales strategies based on market conditions
+78,25,2,Rely on established sales techniques regardless of market conditions
+79,25,3,Struggle to meet sales targets during challenging times
+80,25,4,Limited experience with adapting sales strategies to market conditions
+81,26,1,Regular monitoring and timely restocking
+82,26,2,React to stockouts without proactive management
+83,26,3,Rely on automated systems for inventory management
+84,26,4,Limited involvement in inventory management
+87,27,1,Prioritize exceptional service and issue resolution
+88,27,2,Focus on completing transactions without much interaction
+89,27,3,Follow standard procedures without personalization
+90,27,4,Limited emphasis on customer service

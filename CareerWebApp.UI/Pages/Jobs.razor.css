@@ -1,0 +1,7 @@
+﻿.borderless-dropdown {
+    border: none;
+}
+
+    .borderless-dropdown:focus {
+        outline: none;
+    }

@@ -1,0 +1,10 @@
+﻿.card-box {
+    min-height: 150px;
+    background-color: #F7F7F7
+}
+
+@media (max-width: 768px) {
+    .card-box {
+        min-height: 100px;
+    }
+}

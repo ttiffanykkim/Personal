@@ -1,0 +1,20 @@
+﻿.card-box {
+    min-height: 250px;
+    background-color: #F7F7F7
+}
+
+.img-hands {
+    min-height: 500px;
+    width: auto;
+    object-fit: cover; /* Maintain the aspect ratio/cropping */
+}
+
+@media (max-width: 768px) {
+    .card-box {
+        min-height: 150px;
+    }
+
+    .img-hands {
+        min-height: 100%;
+    }
+}
